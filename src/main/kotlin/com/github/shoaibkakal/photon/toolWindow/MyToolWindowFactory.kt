@@ -11,12 +11,23 @@ import com.intellij.ui.content.ContentFactory
 import com.github.shoaibkakal.photon.MyBundle
 import com.github.shoaibkakal.photon.services.MyProjectService
 import javax.swing.JButton
+import javax.swing.JOptionPane
 
 
 class MyToolWindowFactory : ToolWindowFactory {
 
     init {
-        thisLogger().warn("Don't forget to remove all non-needed sample code files with their corresponding registration entries in `plugin.xml`.")
+        JOptionPane.showMessageDialog(null, "Hello This is alert box", "My Alert", JOptionPane.INFORMATION_MESSAGE)
+        val input = JOptionPane.showInputDialog(null, "Enter your name:")
+
+        if (input != null) {
+            // User clicked OK or entered a value
+            println("You entered: $input")
+        } else {
+            // User clicked Cancel or closed the dialog
+            println("Input canceled")
+        }
+//        thisLogger().warn("Don't forget to remove all non-needed sample code files with their corresponding registration entries in `plugin.xml`.")
     }
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
