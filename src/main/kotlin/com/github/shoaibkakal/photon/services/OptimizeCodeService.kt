@@ -2,6 +2,7 @@ package com.github.shoaibkakal.photon.services
 
 import com.github.shoaibkakal.photon.utils.PhotonPrompt
 import com.github.shoaibkakal.photon.utils.getCurrentFileLanguage
+import com.github.shoaibkakal.photon.utils.removeSpecificText
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.command.WriteCommandAction
@@ -16,12 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class ROLES {
-    user,
-    system
-}
-
-class ReviewCodeService : AnAction() {
+class OptimizeCodeService : AnAction() {
     val coroutine = CoroutineScope(Dispatchers.IO)
     override fun actionPerformed(e: AnActionEvent) {
 
@@ -54,7 +50,7 @@ class ReviewCodeService : AnAction() {
                                 }
 
                                 val messages: MutableList<ChatMessage> = ArrayList()
-                                val systemMessage = ChatMessage(ChatMessageRole.USER.value(), "${PhotonPrompt.REVIEW_CODE(getCurrentFileLanguage(e))}. Below is the code to review:\n $editorSelectedText")
+                                val systemMessage = ChatMessage(ChatMessageRole.USER.value(), "${PhotonPrompt.OPTIMIZE_CODE(getCurrentFileLanguage(e))}. Below is the code to review:\n $editorSelectedText")
                                 messages.add(systemMessage)
                                 val chatCompletionRequest = ChatCompletionRequest
                                         .builder()
@@ -71,7 +67,7 @@ class ReviewCodeService : AnAction() {
                                         Messages.showMessageDialog("Something went wrong on our side!", "Error", Messages.getErrorIcon())
                                         return@launch
                                     }
-                                    val photonResponse = "\n/** PHOTON REVIEW \n* ${resultChoices[0].message.content}"
+                                    val photonResponse = "\n/** Code Optimization: \n* ${resultChoices[0].message.content}"
 
 
                                     WriteCommandAction.runWriteCommandAction(project) {
@@ -105,36 +101,4 @@ class ReviewCodeService : AnAction() {
         }
 
     }
-
-
-    fun removeSpecificText(searchText: String, e: AnActionEvent) {
-        print("I'm called bababbabab");
-        val project: Project = e.project ?: return
-
-        val editor = e.getData(com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR) ?: return
-
-        val document = editor.document
-
-        WriteCommandAction.runWriteCommandAction(project) {
-            val lineNumber = findLineWithText(document, "//TODO: Wait, Photon is snuffling🐕‍")
-            if (lineNumber != -1) {
-                val lineStartOffset = document.getLineStartOffset(lineNumber)
-                val lineEndOffset = document.getLineEndOffset(lineNumber)
-                document.deleteString(lineStartOffset, lineEndOffset)
-            }
-        }
-    }
-
-    private fun findLineWithText(document: com.intellij.openapi.editor.Document, searchText: String): Int {
-        val text = document.text
-        val lines = text.split("\n")
-        for ((index, line) in lines.withIndex()) {
-            if (line.contains(searchText)) {
-                return index
-            }
-        }
-        return -1
-    }
-
-
 }
