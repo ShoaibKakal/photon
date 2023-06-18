@@ -9,27 +9,33 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <actions>
-        <group id="photon" text="Photon" description="Experience code brilliance with photon" popup="true" icon="AllIcons.Actions.Lightning">
+        <group id="photon" text="Photon" description="Experience code brilliance with photon" popup="true"
+               icon="com.github.shoaibkakal.photon.utils.Icons.logo16">
             <add-to-group group-id="EditorPopupMenu"/>
             <action id="PhotonCodeReviewer" class="com.github.shoaibkakal.photon.services.ReviewCodeService"
                     text="Review Code" description="Review my code">
             </action>
-            <action id="PhotonCodeComment" class="com.github.shoaibkakal.photon.services.AddCodeCommentsService"
+            <action id="PhotonCodeOptimizer" class="com.github.shoaibkakal.photon.services.OptimizeCodeService"
                     text="Optimize Code" description="Optimize my code">
             </action>
-            <action id="PhotonCodeOptimizer" class="com.github.shoaibkakal.photon.services.AddCodeCommentsService"
-                    text="Add Comments to Code" description="Add comments">
+
+            <action id="PhotonCodeExplain" class="com.github.shoaibkakal.photon.services.ExplainCodeService"
+                    text="Explain Code" description="Explain code">
             </action>
 
-            <action id="PhotonSettings" class="com.github.shoaibkakal.photon.services.ReviewCodeService"
-                    text="Photon Settings" description="Photon settings">
-            </action>
+<!--            <action id="PhotonCodeComment" class="com.github.shoaibkakal.photon.services.AddCodeCommentsService"-->
+<!--                    text="Add Comments to Code" description="Add comments">-->
+<!--            </action>-->
+
+<!--            <action id="PhotonSettings" class="com.github.shoaibkakal.photon.services.ReviewCodeService"-->
+<!--                    text="Photon Settings" description="Photon settings">-->
+<!--            </action>-->
 
         </group>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.shoaibkakal.photon.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <toolWindow factoryClass="com.github.shoaibkakal.photon.toolWindow.PhotonChatWindow" id="Photon Chat"/>
     </extensions>
 
     <applicationListeners>

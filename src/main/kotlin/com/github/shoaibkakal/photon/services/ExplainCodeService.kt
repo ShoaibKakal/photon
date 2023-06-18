@@ -7,7 +7,6 @@ import com.github.shoaibkakal.photon.utils.removeSpecificText
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.theokanning.openai.completion.chat.ChatCompletionRequest
 import com.theokanning.openai.completion.chat.ChatMessage
@@ -18,17 +17,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class ROLES {
-    user,
-    system
-}
-
-class ReviewCodeService : AnAction() {
+class ExplainCodeService : AnAction() {
     val coroutine = CoroutineScope(Dispatchers.IO)
     override fun actionPerformed(e: AnActionEvent) {
 
         val snuffling = "//TODO: Wait, Photon is snuffling🐕‍\n\n"
         val OpenAI_API_KEY = System.getenv(MyBundle.message("openAIAPIKEY"))
+
+
 
         try {
             val editor = e.getData(com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR)
@@ -46,7 +42,6 @@ class ReviewCodeService : AnAction() {
                         if (!OpenAI_API_KEY.isNullOrEmpty()) {
                             val openAiService = OpenAiService(OpenAI_API_KEY)
 
-//                        Messages.showMessageDialog(snuffling, "Error", Messages.getErrorIcon())
                             coroutine.launch {
                                 WriteCommandAction.runWriteCommandAction(project) {
                                     document.insertString(
@@ -55,11 +50,11 @@ class ReviewCodeService : AnAction() {
                                 }
 
                                 val messages: MutableList<ChatMessage> = ArrayList()
-                                val systemMessage = ChatMessage(ChatMessageRole.USER.value(), "${PhotonPrompt.REVIEW_CODE(getCurrentFileLanguage(e))}. Below is the code to review:\n $editorSelectedText")
+                                val systemMessage = ChatMessage(ChatMessageRole.USER.value(), "${PhotonPrompt.EXPLAIN_CODE(getCurrentFileLanguage(e))}. Below is the code to review:\n $editorSelectedText")
                                 messages.add(systemMessage)
                                 val chatCompletionRequest = ChatCompletionRequest
                                         .builder()
-                                        .model("gpt-3.5-turbo")
+                                        .model(MyBundle.message("GPT_3_5_TURBO"))
                                         .messages(messages)
                                         .n(1)
                                         //.maxTokens(10)
@@ -72,7 +67,7 @@ class ReviewCodeService : AnAction() {
                                         Messages.showMessageDialog(MyBundle.message("somethingWentWrong"), "Error", Messages.getErrorIcon())
                                         return@launch
                                     }
-                                    val photonResponse = "\n/** PHOTON REVIEW \n* ${resultChoices[0].message.content}"
+                                    val photonResponse = "\n/** Code Explained: \n* ${resultChoices[0].message.content}"
 
 
                                     WriteCommandAction.runWriteCommandAction(project) {
@@ -101,10 +96,10 @@ class ReviewCodeService : AnAction() {
             }
         } catch (exp: Exception) {
             Messages.showMessageDialog("Exception: $exp", "Error", Messages.getErrorIcon())
-//            removeSpecificText(snuffling, e)
-
+            removeSpecificText(snuffling, e)
         }
 
     }
+
 
 }

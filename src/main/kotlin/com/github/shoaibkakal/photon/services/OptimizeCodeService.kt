@@ -18,12 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class ROLES {
-    user,
-    system
-}
-
-class ReviewCodeService : AnAction() {
+class OptimizeCodeService : AnAction() {
     val coroutine = CoroutineScope(Dispatchers.IO)
     override fun actionPerformed(e: AnActionEvent) {
 
@@ -40,13 +35,13 @@ class ReviewCodeService : AnAction() {
                 val editorSelectedText = editorSelection.selectedText
                 val selectionStart = editorSelection.selectionStart
                 if (!editorSelectedText.isNullOrEmpty()) {
+
                     if (editorSelectedText.length > 6000) {
                         Messages.showMessageDialog(MyBundle.message("selectedTextTooLong"), "Error", Messages.getErrorIcon())
                     } else {
                         if (!OpenAI_API_KEY.isNullOrEmpty()) {
                             val openAiService = OpenAiService(OpenAI_API_KEY)
 
-//                        Messages.showMessageDialog(snuffling, "Error", Messages.getErrorIcon())
                             coroutine.launch {
                                 WriteCommandAction.runWriteCommandAction(project) {
                                     document.insertString(
@@ -55,7 +50,7 @@ class ReviewCodeService : AnAction() {
                                 }
 
                                 val messages: MutableList<ChatMessage> = ArrayList()
-                                val systemMessage = ChatMessage(ChatMessageRole.USER.value(), "${PhotonPrompt.REVIEW_CODE(getCurrentFileLanguage(e))}. Below is the code to review:\n $editorSelectedText")
+                                val systemMessage = ChatMessage(ChatMessageRole.USER.value(), "${PhotonPrompt.OPTIMIZE_CODE(getCurrentFileLanguage(e))}. Below is the code to review:\n $editorSelectedText")
                                 messages.add(systemMessage)
                                 val chatCompletionRequest = ChatCompletionRequest
                                         .builder()
@@ -72,7 +67,7 @@ class ReviewCodeService : AnAction() {
                                         Messages.showMessageDialog(MyBundle.message("somethingWentWrong"), "Error", Messages.getErrorIcon())
                                         return@launch
                                     }
-                                    val photonResponse = "\n/** PHOTON REVIEW \n* ${resultChoices[0].message.content}"
+                                    val photonResponse = "\n/** Code Optimization: \n* ${resultChoices[0].message.content}"
 
 
                                     WriteCommandAction.runWriteCommandAction(project) {
@@ -101,10 +96,9 @@ class ReviewCodeService : AnAction() {
             }
         } catch (exp: Exception) {
             Messages.showMessageDialog("Exception: $exp", "Error", Messages.getErrorIcon())
-//            removeSpecificText(snuffling, e)
+            removeSpecificText(snuffling, e)
 
         }
 
     }
-
 }
