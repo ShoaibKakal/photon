@@ -15,7 +15,7 @@
             <action id="PhotonCodeReviewer" class="com.github.shoaibkakal.photon.services.ReviewCodeService"
                     text="Review Code" description="Review my code">
             </action>
-            <action id="PhotonCodeComment" class="com.github.shoaibkakal.photon.services.OptimizeCodeService"
+            <action id="PhotonCodeOptimizer" class="com.github.shoaibkakal.photon.services.OptimizeCodeService"
                     text="Optimize Code" description="Optimize my code">
             </action>
 
@@ -23,9 +23,9 @@
                     text="Explain Code" description="Explain code">
             </action>
 
-            <action id="PhotonCodeOptimizer" class="com.github.shoaibkakal.photon.services.AddCodeCommentsService"
-                    text="Add Comments to Code" description="Add comments">
-            </action>
+<!--            <action id="PhotonCodeComment" class="com.github.shoaibkakal.photon.services.AddCodeCommentsService"-->
+<!--                    text="Add Comments to Code" description="Add comments">-->
+<!--            </action>-->
 
 <!--            <action id="PhotonSettings" class="com.github.shoaibkakal.photon.services.ReviewCodeService"-->
 <!--                    text="Photon Settings" description="Photon settings">-->

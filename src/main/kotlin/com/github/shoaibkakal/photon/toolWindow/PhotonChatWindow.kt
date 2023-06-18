@@ -44,7 +44,7 @@ class PhotonChatWindow : ToolWindowFactory {
             val label = JBLabel(MyBundle.message("chatUnderDevelopment")).apply {
                 font = font.deriveFont(Font.BOLD, 22f)
             }
-            val imageIcon = ImageIcon(URL("https://www.kindpng.com/picc/m/775-7752343_doge-doge-meme-2020-hd-png-download.png"), "desc")
+            val imageIcon = ImageIcon(URL(MyBundle.message("dogMemeURI")))
             val scaledImage = imageIcon.image.getScaledInstance(256, 256, java.awt.Image.SCALE_SMOOTH)
             val scaledImageIcon = ImageIcon(scaledImage)
 
@@ -69,9 +69,9 @@ class PhotonChatWindow : ToolWindowFactory {
             add(panel)
 
             val buttonPanel = JPanel()
-            buttonPanel.add(JButton("For contribution check out Photon on Github").apply {
+            buttonPanel.add(JButton(MyBundle.message("forContributionCheckoutGithub")).apply {
                 addActionListener {
-                    val url = "http://www.github.com/shoaibkakal/photon"
+                    val url = MyBundle.message("photonGithubLink")
                     val uri = URI(url)
                     Desktop.getDesktop().browse(uri)
                 }

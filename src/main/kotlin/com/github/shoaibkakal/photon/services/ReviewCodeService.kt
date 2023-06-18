@@ -1,7 +1,9 @@
 package com.github.shoaibkakal.photon.services
 
+import com.github.shoaibkakal.photon.MyBundle
 import com.github.shoaibkakal.photon.utils.PhotonPrompt
 import com.github.shoaibkakal.photon.utils.getCurrentFileLanguage
+import com.github.shoaibkakal.photon.utils.removeSpecificText
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.command.WriteCommandAction
@@ -26,9 +28,7 @@ class ReviewCodeService : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
 
         val snuffling = "//TODO: Wait, Photon is snuffling🐕‍\n\n"
-        val OpenAI_API_KEY = "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"
-        //        String token = System.getenv("OPENAI_API_KEY");
-        val openAiService = OpenAiService(OpenAI_API_KEY)
+        val OpenAI_API_KEY = System.getenv(MyBundle.message("openAIAPIKEY"))
 
         try {
             val editor = e.getData(com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR)
@@ -41,9 +41,10 @@ class ReviewCodeService : AnAction() {
                 val selectionStart = editorSelection.selectionStart
                 if (!editorSelectedText.isNullOrEmpty()) {
                     if (editorSelectedText.length > 6000) {
-                        Messages.showMessageDialog("Selected text is too long.", "Error", Messages.getErrorIcon())
+                        Messages.showMessageDialog(MyBundle.message("selectedTextTooLong"), "Error", Messages.getErrorIcon())
                     } else {
                         if (!OpenAI_API_KEY.isNullOrEmpty()) {
+                            val openAiService = OpenAiService(OpenAI_API_KEY)
 
 //                        Messages.showMessageDialog(snuffling, "Error", Messages.getErrorIcon())
                             coroutine.launch {
@@ -68,7 +69,7 @@ class ReviewCodeService : AnAction() {
                                     val resultChoices = openAiService.createChatCompletion(chatCompletionRequest).choices
 
                                     if (resultChoices.size == 0) {
-                                        Messages.showMessageDialog("Something went wrong on our side!", "Error", Messages.getErrorIcon())
+                                        Messages.showMessageDialog(MyBundle.message("somethingWentWrong"), "Error", Messages.getErrorIcon())
                                         return@launch
                                     }
                                     val photonResponse = "\n/** PHOTON REVIEW \n* ${resultChoices[0].message.content}"
@@ -93,7 +94,7 @@ class ReviewCodeService : AnAction() {
                             openAiService.shutdownExecutor()
                         } else {
                             removeSpecificText(snuffling, e)
-                            Messages.showMessageDialog("Please add API Key", "Error", Messages.getErrorIcon())
+                            Messages.showMessageDialog(MyBundle.message("couldNotFindAPIKEY"), "Error", Messages.getErrorIcon())
                         }
                     }
                 }
@@ -105,36 +106,5 @@ class ReviewCodeService : AnAction() {
         }
 
     }
-
-
-    fun removeSpecificText(searchText: String, e: AnActionEvent) {
-        print("I'm called bababbabab");
-        val project: Project = e.project ?: return
-
-        val editor = e.getData(com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR) ?: return
-
-        val document = editor.document
-
-        WriteCommandAction.runWriteCommandAction(project) {
-            val lineNumber = findLineWithText(document, "//TODO: Wait, Photon is snuffling🐕‍")
-            if (lineNumber != -1) {
-                val lineStartOffset = document.getLineStartOffset(lineNumber)
-                val lineEndOffset = document.getLineEndOffset(lineNumber)
-                document.deleteString(lineStartOffset, lineEndOffset)
-            }
-        }
-    }
-
-    private fun findLineWithText(document: com.intellij.openapi.editor.Document, searchText: String): Int {
-        val text = document.text
-        val lines = text.split("\n")
-        for ((index, line) in lines.withIndex()) {
-            if (line.contains(searchText)) {
-                return index
-            }
-        }
-        return -1
-    }
-
 
 }

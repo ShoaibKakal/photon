@@ -1,5 +1,6 @@
 package com.github.shoaibkakal.photon.services
 
+import com.github.shoaibkakal.photon.MyBundle
 import com.github.shoaibkakal.photon.utils.PhotonPrompt
 import com.github.shoaibkakal.photon.utils.getCurrentFileLanguage
 import com.github.shoaibkakal.photon.utils.removeSpecificText
@@ -22,9 +23,7 @@ class OptimizeCodeService : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
 
         val snuffling = "//TODO: Wait, Photon is snuffling🐕‍\n\n"
-        val OpenAI_API_KEY = "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"
-        //        String token = System.getenv("OPENAI_API_KEY");
-        val openAiService = OpenAiService(OpenAI_API_KEY)
+        val OpenAI_API_KEY = System.getenv(MyBundle.message("openAIAPIKEY"))
 
         try {
             val editor = e.getData(com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR)
@@ -36,12 +35,13 @@ class OptimizeCodeService : AnAction() {
                 val editorSelectedText = editorSelection.selectedText
                 val selectionStart = editorSelection.selectionStart
                 if (!editorSelectedText.isNullOrEmpty()) {
+
                     if (editorSelectedText.length > 6000) {
-                        Messages.showMessageDialog("Selected text is too long.", "Error", Messages.getErrorIcon())
+                        Messages.showMessageDialog(MyBundle.message("selectedTextTooLong"), "Error", Messages.getErrorIcon())
                     } else {
                         if (!OpenAI_API_KEY.isNullOrEmpty()) {
+                            val openAiService = OpenAiService(OpenAI_API_KEY)
 
-//                        Messages.showMessageDialog(snuffling, "Error", Messages.getErrorIcon())
                             coroutine.launch {
                                 WriteCommandAction.runWriteCommandAction(project) {
                                     document.insertString(
@@ -64,7 +64,7 @@ class OptimizeCodeService : AnAction() {
                                     val resultChoices = openAiService.createChatCompletion(chatCompletionRequest).choices
 
                                     if (resultChoices.size == 0) {
-                                        Messages.showMessageDialog("Something went wrong on our side!", "Error", Messages.getErrorIcon())
+                                        Messages.showMessageDialog(MyBundle.message("somethingWentWrong"), "Error", Messages.getErrorIcon())
                                         return@launch
                                     }
                                     val photonResponse = "\n/** Code Optimization: \n* ${resultChoices[0].message.content}"
@@ -89,14 +89,14 @@ class OptimizeCodeService : AnAction() {
                             openAiService.shutdownExecutor()
                         } else {
                             removeSpecificText(snuffling, e)
-                            Messages.showMessageDialog("Please add API Key", "Error", Messages.getErrorIcon())
+                            Messages.showMessageDialog(MyBundle.message("couldNotFindAPIKEY"), "Error", Messages.getErrorIcon())
                         }
                     }
                 }
             }
         } catch (exp: Exception) {
             Messages.showMessageDialog("Exception: $exp", "Error", Messages.getErrorIcon())
-//            removeSpecificText(snuffling, e)
+            removeSpecificText(snuffling, e)
 
         }
 

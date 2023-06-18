@@ -22,8 +22,8 @@ class ExplainCodeService : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
 
         val snuffling = "//TODO: Wait, Photon is snuffling🐕‍\n\n"
-        val OpenAI_API_KEY = "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"
-        val openAiService = OpenAiService(OpenAI_API_KEY)
+        val OpenAI_API_KEY = System.getenv(MyBundle.message("openAIAPIKEY"))
+
 
 
         try {
@@ -37,9 +37,10 @@ class ExplainCodeService : AnAction() {
                 val selectionStart = editorSelection.selectionStart
                 if (!editorSelectedText.isNullOrEmpty()) {
                     if (editorSelectedText.length > 6000) {
-                        Messages.showMessageDialog("Selected text is too long.", "Error", Messages.getErrorIcon())
+                        Messages.showMessageDialog(MyBundle.message("selectedTextTooLong"), "Error", Messages.getErrorIcon())
                     } else {
                         if (!OpenAI_API_KEY.isNullOrEmpty()) {
+                            val openAiService = OpenAiService(OpenAI_API_KEY)
 
                             coroutine.launch {
                                 WriteCommandAction.runWriteCommandAction(project) {
@@ -48,7 +49,6 @@ class ExplainCodeService : AnAction() {
                                     )
                                 }
 
-                                print("Get current language: ${getCurrentFileLanguage(e)}")
                                 val messages: MutableList<ChatMessage> = ArrayList()
                                 val systemMessage = ChatMessage(ChatMessageRole.USER.value(), "${PhotonPrompt.EXPLAIN_CODE(getCurrentFileLanguage(e))}. Below is the code to review:\n $editorSelectedText")
                                 messages.add(systemMessage)
@@ -64,7 +64,7 @@ class ExplainCodeService : AnAction() {
                                     val resultChoices = openAiService.createChatCompletion(chatCompletionRequest).choices
 
                                     if (resultChoices.size == 0) {
-                                        Messages.showMessageDialog("Something went wrong on our side!", "Error", Messages.getErrorIcon())
+                                        Messages.showMessageDialog(MyBundle.message("somethingWentWrong"), "Error", Messages.getErrorIcon())
                                         return@launch
                                     }
                                     val photonResponse = "\n/** Code Explained: \n* ${resultChoices[0].message.content}"
@@ -89,15 +89,14 @@ class ExplainCodeService : AnAction() {
                             openAiService.shutdownExecutor()
                         } else {
                             removeSpecificText(snuffling, e)
-                            Messages.showMessageDialog("Please add API Key", "Error", Messages.getErrorIcon())
+                            Messages.showMessageDialog(MyBundle.message("couldNotFindAPIKEY"), "Error", Messages.getErrorIcon())
                         }
                     }
                 }
             }
         } catch (exp: Exception) {
             Messages.showMessageDialog("Exception: $exp", "Error", Messages.getErrorIcon())
-//            removeSpecificText(snuffling, e)
-
+            removeSpecificText(snuffling, e)
         }
 
     }

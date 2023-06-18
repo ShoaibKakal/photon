@@ -1,5 +1,6 @@
 package com.github.shoaibkakal.photon.services
 
+import com.github.shoaibkakal.photon.MyBundle
 import com.github.shoaibkakal.photon.utils.PhotonPrompt
 import com.github.shoaibkakal.photon.utils.getCurrentFileLanguage
 import com.intellij.openapi.actionSystem.AnAction
@@ -18,7 +19,7 @@ import io.reactivex.functions.Consumer
 
 class AddCodeCommentsService : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        Messages.showMessageDialog("Adding comments to code is still under development .", "Under Development", com.github.shoaibkakal.photon.utils.Icons.logo)
+        Messages.showMessageDialog(MyBundle.message("isUnderDevelopment","Adding comments to code is"), "Under Development", com.github.shoaibkakal.photon.utils.Icons.logo)
 
     }
 }
