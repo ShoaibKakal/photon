@@ -4,24 +4,35 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
-## Template ToDo list
-- [x] Create a new [IntelliJ Platform Plugin Template][template] project.
-- [ ] Get familiar with the [template documentation][template].
-- [ ] Adjust the [pluginGroup](./gradle.properties), [plugin ID](./src/main/resources/META-INF/plugin.xml) and [sources package](./src/main/kotlin).
-- [ ] Adjust the plugin description in `README` (see [Tips][docs:plugin-description])
-- [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html?from=IJPluginTemplate).
-- [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
-- [ ] Set the `PLUGIN_ID` in the above README badges.
-- [ ] Set the [Plugin Signing](https://plugins.jetbrains.com/docs/intellij/plugin-signing.html?from=IJPluginTemplate) related [secrets](https://github.com/JetBrains/intellij-platform-plugin-template#environment-variables).
-- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html?from=IJPluginTemplate).
-- [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
-
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
+## PHOTON
+Introducing **Photon** for JetBrain IDEs: Supercharge Your Code Optimization and Review Process!
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
+Photon is a groundbreaking plugin designed to revolutionize the way you review, optimize, and gain insights into your code. Powered by the cutting-edge GPT-3.5 Turbo model, Photon brings the power of advanced artificial intelligence directly to your favorite JetBrain IDEs, empowering you to write cleaner, more efficient code with ease.
 
-To keep everything working, do not remove `<!-- ... -->` sections. 
+With Photon, you can effortlessly enhance your coding workflow and take your productivity to new heights. 
+
+## Here's what Photon has to offer
+> 1. **Intelligent Code Reviews:** Photon's AI-powered engine provides intelligent code reviews that go beyond simple syntax checks. It comprehensively analyzes your code, highlighting potential improvements, suggesting alternative approaches, and even flagging potential bugs or vulnerabilities. Say goodbye to hours spent manually reviewing your code—Photon does the heavy lifting for you.
+> 2. **Optimize Code on the Fly:** Photon helps you optimize your code. By leveraging the powerful GPT-3.5 Turbo model, it provides you with smart suggestions to streamline your code, eliminate redundancy, and improve overall efficiency. Experience significant time savings as Photon identifies potential code optimizations you may have missed.
+> 3. **Interactive Code Explanations:** Ever wondered why a particular piece of code works the way it does? Photon delivers intuitive code explanations, unraveling complex logic and algorithms, and shedding light on intricate code segments. Gain a deeper understanding of your codebase, enhancing your overall programming knowledge and expertise.
+> 4. **Seamless Integration:** Photon seamlessly integrates into your JetBrain IDEs, ensuring a hassle-free experience. It seamlessly adapts to your coding style and preferences, augmenting your existing workflow without disruption. Whether you're working on a personal project or collaborating with a team, Photon has got you covered.
+
+## How to use
+- Install the plugin
+- Open any Jetbrains IDE
+- Open your code file
+- Select code(less than 6000 chars), and right click
+- Click "Photon" in the menu
+- Wait for the magic to happen.
+
+
+## Note 
+Photon requires an active GPT-3.5 Turbo API key for full functionality. Get API key from [OpenAI](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key).
+Please set OPENAI_API_KEY in your system environment variables
+
+Thanks to ChatGPT for writing above description.
+
 <!-- Plugin description end -->
 
 ## Installation
